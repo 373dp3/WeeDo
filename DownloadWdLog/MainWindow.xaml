@@ -1,0 +1,19 @@
+﻿<Window x:Class="DownloadWdLog.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:DownloadWdLog"
+        mc:Ignorable="d"
+        Title="WeeDo ログ一括取得" Height="350" Width="525" Icon="icon.ico">
+    <DockPanel>
+        <Label x:Name="label1" Content="client__id.jsonファイル（認証情報）" HorizontalAlignment="Left" VerticalAlignment="Top" RenderTransformOrigin="-0.975,-0.046" Margin="5,0" DockPanel.Dock="Top"/>
+        <TextBox x:Name="textBoxFile" Height="46" TextWrapping="Wrap" Text="{Binding jsonFile}" VerticalAlignment="Top" Margin="5,5,5,0" DockPanel.Dock="Top"/>
+        <Button x:Name="button1" Content="client__id.jsonの選択"  VerticalAlignment="Top" Click="button1_Click" MinWidth="200" MaxWidth="300" Margin="0,5,0,0" DockPanel.Dock="Top"/>
+        <Label x:Name="label" Content="スプレッドシートの元データURL (アカウント開設通知書の情報追記先URL)" VerticalAlignment="Top" Margin="5,15,5,0" DockPanel.Dock="Top"/>
+        <TextBox x:Name="textBoxUrl" Height="46"  TextWrapping="Wrap" Text="{Binding url, Mode=TwoWay}" VerticalAlignment="Top" Margin="5,5,5,0" DockPanel.Dock="Top"/>
+        <Button x:Name="button" Content="ダウンロードしてCSVファイルに出力"  VerticalAlignment="Top" Click="button_Click" MinWidth="200" MaxWidth="300" Margin="0,5,0,0" DockPanel.Dock="Top"/>
+        <TextBox x:Name="textBoxStatus" TextWrapping="Wrap" Text="{Binding status, Mode=TwoWay}" Margin="5,15,5,5" DockPanel.Dock="Bottom" />
+
+    </DockPanel>
+</Window>
