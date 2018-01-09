@@ -2,14 +2,14 @@
 Sakura.ioとGoogleスプレッドシートを用いたビジネス向けIoTを実現する為の各種ソフトウェアです。
 可能な限りオープンソース（MITライセンス）にてご提供しております。
 
-## 概要
+## 概要図
 <img src="https://raw.githubusercontent.com/373dp3/WeeDo/master/img/overbiew.jpg" alt="概要">
 同一フロア内の機器から取得したデータを近距離無線モジュールTWE-Liteで親機に送信。
 4G LTE通信モジュールSakura.ioとArduinoの組み合わせで情報を中継・転送を行いGoogleスプレッドシートに
 値を挿入するためのソフトウェア群です。
 
 ## 特徴
-1. 超低コスト志向(月60円のLTE回線であるSakura.io、親機のOSレス構成)
+1. 超低コスト志向 (月60円のLTE回線であるSakura.ioを複数の無線センサ子機で共有、親機OSレス)
 2. 表計算ソフトの知識でフロントエンドを構成する。
 3. 商用向け転用に利用しやすいMITライセンス
 
@@ -32,6 +32,10 @@ Sakura.ioとGoogleスプレッドシートを用いたビジネス向けIoTを�
     <td>parent, seed70mm_frid_client, simple_raw_clientから参照している共通コード </td>
   </tr>
   <tr>
+    <td>eagle </td>
+    <td>電子回路CAD EAGLE用の各種ファイル </td>
+  </tr>
+  <tr>
     <td>parent </td>
     <td>親機のArduino向けソースコード </td>
   </tr>
@@ -50,3 +54,5 @@ Sakura.ioとGoogleスプレッドシートを用いたビジネス向けIoTを�
 </table>
 (VPSサーバにてGoogleスプレッドシートに値を挿入する処理については公開準備中です)
 
+## 公式サイト
+<a href="https://secure.dp3.jp/WeeDo/">https://secure.dp3.jp/WeeDo/</a>
