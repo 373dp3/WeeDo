@@ -1,5 +1,5 @@
 /*
-* CycleTimeParent.ino
+* parent.ino
 *
 * Copyright (c) 2018 WeeDo
 * Author      : Toshiaki Minami (min@dp3.jp)
@@ -157,7 +157,7 @@ void loop() {
 
 	while (Serial.read() >= 0) {}//バッファの破棄
 
-	//  ----------------------------------------------------------------- [RAW NOW/RAW SPOOL]
+								 //  ----------------------------------------------------------------- [RAW NOW/RAW SPOOL]
 	{
 		spool_info spool;
 		uint8_t dat[8];
@@ -174,8 +174,8 @@ void loop() {
 				//ACKの送信
 				RawData rawdata;
 				memset(&rawdata, 0, sizeof(RawData));
-				for (int i = 0; i<sizeof(rawdata.oct7.data); i++) {
-					rawdata.oct7.data[i] = dat[i + 1];
+				for (int i = 0; i<sizeof(rawdata.data); i++) {
+					rawdata.data[i] = dat[i + 1];
 				}
 				rawclient.sendData(&rawdata);
 			}

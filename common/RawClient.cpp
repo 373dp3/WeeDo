@@ -58,7 +58,7 @@ void RawClient::sendData(RawData * data)
 
 	//’l‚ÌŠi”[
 	for (int i = 0; i<7; i++) {
-		_rc_buf[2 + i] = data->oct7.data[i];
+		_rc_buf[2 + i] = data->data[i];
 	}
 
 	//LRC

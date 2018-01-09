@@ -38,22 +38,9 @@
 
 #include <SoftwareSerial.h>
 
-
-struct RawData7Octet {
-	uint8_t data[7];
-};
-struct RawData124byte
-{
-	uint8_t	data1_8;
-	uint16_t data2_16;
-	uint32_t data3_32;
-};
 struct RawData
 {
-	union {
-		RawData7Octet oct7;
-		RawData124byte d_124;
-	};
+	uint8_t data[7];
 };
 
 //TWE-Lite中の自モジュールへの命令を示すコード

@@ -1,0 +1,36 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup Label="Globals">
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <ItemsProjectGuid>{ddad4d18-b971-4683-a68f-4481930db3dd}</ItemsProjectGuid>
+  </PropertyGroup>
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);$(MSBuildThisFileDirectory)</AdditionalIncludeDirectories>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ProjectCapability Include="SourceItemsFromImports" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="$(MSBuildThisFileDirectory)readme.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="$(MSBuildThisFileDirectory)dmsg.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)RawClient.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)SakuraIoCommon.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)spool_manager.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)twe_packet_helper.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)twe_packet_helper_ctAve.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)twe_packet_parseer.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="$(MSBuildThisFileDirectory)RawClient.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)SakuraIoCommon.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)spool_manager.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)twe_packet_helper.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)twe_packet_helper_ctAve.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)twe_packet_parseer.cpp" />
+  </ItemGroup>
+</Project>
