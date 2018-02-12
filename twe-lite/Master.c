@@ -82,7 +82,7 @@ static void vReceiveCtData(tsRxDataApp *pRx);
 //親機として強制的に使用する場合は、USE_TOCOSTICKを有効にする。AD無効化と親機強制
 //USE_TOCOSTICK以外なら、子機特化設定を(Sleep、両エッジ割込)
 
-#define USE_TOCOSTICK
+//#define USE_TOCOSTICK
 #define DP3_SENSOR_TYPE_CODE_CT		(0x01)
 #define DP3_SENSOR_TYPE_CODE_CALL	(0x02)
 #define DP3_SENSOR_TYPE_CODE_POLL	(0x03)
@@ -101,11 +101,11 @@ static void vReceiveCtData(tsRxDataApp *pRx);
 	#define DP3_DOUBLE_EDGE
 
 	//センサー種別 0x01:CT, 0x02:呼び出し, 0x03:定期通知
-	#define DP3_SENSOR_TYPE	(DP3_SENSOR_TYPE_CODE_CALL)
+	#define DP3_SENSOR_TYPE	(DP3_SENSOR_TYPE_CODE_CT)
 #endif
 
-//ファームウェア決め打ちのチャネル番号
-#define DP3_FIX_CHANNEL	(11)
+//ファームウェア決め打ちのチャネル番号(11-26)
+#define DP3_FIX_CHANNEL	(22)
 
 //バッテリアラートを出す閾値 2300 -> 2.3v
 #define	BATT_ALERT		(2300)
@@ -136,7 +136,7 @@ uint32	ui32WdTxWaitMs = 0;
 
 //約25秒毎に送信する連続試験用
 #define SW_CLIENT_TEST
-
+#define SW_CLIENT_TEST_INTERVAL	(50000UL>>1UL)
 
 /****************************************************************************/
 /***        Macro Definitions                                             ***/
@@ -640,12 +640,33 @@ void vProcessEvCoreSlp(tsEvent *pEv, teEvent eEvent, uint32 u32evarg) {
 				}
 			}
 #endif
+			//CTの光消灯もしくはリードスイッチオフは情報を送信しない
+			//ONと次のONとの時間間隔からCTを求めるため。ONとOFFを混在させると
+			//Sakura.io側のペイロードサイズの制約により精度が低下し、また、
+			//Excel側での集計側が複雑になりすぎるため。
+			int isEnableTx = TRUE;
+			if(DP3_SENSOR_TYPE == DP3_SENSOR_TYPE_CODE_CT){
+				//CT子機であり、光消灯もしくはリードスイッチOFFの場合、送信しない
+				int sum = 0;
+				int i=0;
+				for(i=0; i<4; i++)
+				{
+					sum += sAppData.sIOData_now.au8Input[i] & 1;
+				}
+				if(sum != 0) { isEnableTx = FALSE; }
+			}
 
 #ifdef SW_CLIENT_TEST
 			//連続テストの場合、スリープ復帰でseq加算、rep初期化
 			if(dp3Rep>=5){
 				dp3Seq ++;
 				dp3Rep = 0;
+			}
+			//テスト用CTの場合、SwOnの送信は回避する。(CT単純化)
+			if(DP3_SENSOR_TYPE == DP3_SENSOR_TYPE_CODE_CT){
+				if(dp3Seq % 2 == 1){
+					isEnableTx = FALSE;
+				}
 			}
 #endif
 
@@ -656,13 +677,19 @@ void vProcessEvCoreSlp(tsEvent *pEv, teEvent eEvent, uint32 u32evarg) {
 			// クイックで送信
 			//sAppData.sIOData_now.i16TxCbId = i16TransmitIoData(TRUE, FALSE);
 			//この処理が子機のスリープモード時の発呼を担う。
-			sAppData.sIOData_now.i16TxCbId = i16TransmitWdData(TRUE, FALSE);
+			if(isEnableTx==TRUE){
+				sAppData.sIOData_now.i16TxCbId = i16TransmitWdData(TRUE, FALSE);
+			}
 			dp3Rep++;
 #endif
 			// 完了待ちをするため CbId を保存する。
 			// TODO: この時点で失敗した場合は、次の状態のタイムアウトで処理されるが非効率である。
 
-			ToCoNet_Event_SetState(pEv, E_STATE_WAIT_TX);
+			if(isEnableTx==TRUE){
+				ToCoNet_Event_SetState(pEv, E_STATE_WAIT_TX);
+			}else{
+				ToCoNet_Event_SetState(pEv, E_STATE_FINISHED);
+			}
 		}
 		break;
 
@@ -730,7 +757,7 @@ void vProcessEvCoreSlp(tsEvent *pEv, teEvent eEvent, uint32 u32evarg) {
 				vSleep(sAppData.u32SleepDur, TRUE, FALSE);
 #endif
 #else
-				vSleep(25000UL, TRUE, FALSE);
+				vSleep(SW_CLIENT_TEST_INTERVAL, TRUE, FALSE);
 //				vSleep(10000UL, TRUE, FALSE);
 #endif
 			}

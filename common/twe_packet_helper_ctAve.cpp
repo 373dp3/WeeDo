@@ -179,8 +179,17 @@ void TwePacketHelperCtAve::clearCntAndChUpdateInfo() {
 			buf[i].start_ms = buf[i].lastPacket.millis;
 		}
 		else {
-			//何の処理も行われていなかったのでクリアする。
-			buf[i].start_ms = 0;
+			//SWに有効値が格納されている場合、初期ファームと判断して、
+			//旧来通り始点時刻をクリアする。SWが0の場合は、単純化された
+			//20180211ファームとして判断する。
+			if (buf[i].lastPacket.swVec.sw != 0) {
+				//何の処理も行われていなかったのでクリアする。
+				buf[i].start_ms = 0;
+			}
+			else {
+				//単純化版の場合は前回の時間を保持する。
+				buf[i].start_ms = buf[i].lastPacket.millis;
+			}
 		}
 		buf[i].active_duration_deciSec = 0;
 		buf[i].lastPacket.swVec.sw = 0;

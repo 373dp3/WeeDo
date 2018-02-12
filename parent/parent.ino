@@ -33,7 +33,8 @@
 #include <avr/sleep.h>
 #include <avr/wdt.h>
 
-#define LED_PIN	(13)
+//2017年講習会の基盤は13、号口は8
+#define LED_PIN	(8)
 
 //アップロード頻度リミッタ(SPOOL_UPLOAD_LIMITER_MS)は,
 //spool_manager.hにて定義
@@ -95,6 +96,10 @@ void setup() {
 	//LED出力
 	pinMode(LED_PIN, OUTPUT);
 
+	char buf[MAX_STR_BUF];
+	uint8_t test = sakuraio.getFirmwareVersion(buf);
+	dln2("Sakura farm ver:", buf);
+
 }//setup
 
 
@@ -104,6 +109,7 @@ unsigned long keepOutMs = 0;
 void loop() {
 	int bufferIndex = 0;//AveバッファIndex取得用
 	uint8_t signal = sakuraio.getSignalQuality();
+	
 
 
 	//電波が無い場合、LEDを点灯する。
